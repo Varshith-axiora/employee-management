@@ -23,9 +23,13 @@
 </form>
 
 <br>
-    <h1>🚀 Employee Management System</h1>
+    <h1>{{ app_name }}</h1>
 
-    <form action="/add" method="POST">
+        <p><strong>Company:</strong> {{ company }}</p>
+
+        <p><strong>Environment:</strong> {{ environment }}</p>
+
+        <form action="/add" method="POST">
 
         <p>Name</p>
         <input type="text" name="name" required>
