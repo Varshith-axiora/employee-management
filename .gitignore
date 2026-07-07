@@ -6,13 +6,16 @@ __pycache__/
 venv/
 
 # Database
-database/*.db
-
-# VS Code
-.vscode/
+database/
 
 # Environment Variables
 .env
+
+# Google Cloud Service Account Key
+key.json
+
+# VS Code
+.vscode/
 
 # OS Files
 Thumbs.db
