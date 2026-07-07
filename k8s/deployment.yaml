@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: employee-app
-        image: varshithkumar8/employee-management:v10
+        image: varshithkumar8/employee-management:latest
 
         ports:
         - containerPort: 5000
@@ -30,10 +30,6 @@ spec:
 
         - secretRef:
             name: postgres-secret
-
-        volumeMounts:
-        - name: employee-storage
-          mountPath: /app/database
 
         livenessProbe:
           httpGet:
@@ -56,8 +52,3 @@ spec:
           limits:
             cpu: "500m"
             memory: "512Mi"
-
-      volumes:
-      - name: employee-storage
-        persistentVolumeClaim:
-          claimName: employee-pvc
