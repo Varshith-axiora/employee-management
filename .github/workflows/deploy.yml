@@ -7,38 +7,28 @@ on:
       - completed
 
 jobs:
-  deploy:
+  update-manifest:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Get GKE Credentials
-        uses: google-github-actions/get-gke-credentials@v2
-        with:
-          cluster_name: ${{ secrets.GKE_CLUSTER }}
-          location: ${{ secrets.GKE_ZONE }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-
-      - name: Install Helm
-        uses: azure/setup-helm@v4
-
-      - name: Deploy using Helm
+      - name: Update Helm image tag
         run: |
-          helm upgrade --install employee ./employee-chart \
-            --set image.repository=${{ secrets.DOCKER_USERNAME }}/employee-management \
-            --set image.tag=${{ github.event.workflow_run.head_sha }}
+          sed -i "s/tag:.*/tag: latest/" employee-chart/values-prod.yaml
 
-      - name: Wait for Rollout
+      - name: Commit updated Helm values
         run: |
-          kubectl rollout status deployment/employee-management
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add employee-chart/values-prod.yaml
+
+          git diff --cached --quiet || \
+          git commit -m "Update production image"
+
+          git push
