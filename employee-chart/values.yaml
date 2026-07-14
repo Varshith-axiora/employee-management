@@ -12,10 +12,39 @@ service:
 
 configMap:
   name: employee-config
+  dbHost: postgres-service
+  dbPort: "5432"
 
 secret:
   name: postgres-secret
+  database: employee_db
+  username: postgres
+  password: admin123
 
+postgres:
+  replicaCount: 1
+
+  image:
+    repository: postgres
+    tag: "17"
+    pullPolicy: IfNotPresent
+
+  service:
+    name: postgres-service
+    port: 5432
+
+  pvc:
+    claimName: postgres-pvc
+
+  container:
+    name: postgres
+
+  storage:
+    mountPath: /var/lib/postgresql/data
+
+  storageSize: 2Gi
+
+  pgdata: /var/lib/postgresql/data/pgdata
 resources:
   requests:
     cpu: "100m"

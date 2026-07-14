@@ -5,5 +5,5 @@ metadata:
   name: {{ .Values.configMap.name }}
 
 data:
-  DB_HOST: postgres-service
-  DB_PORT: "5432"
+  DB_HOST: {{ .Values.configMap.dbHost | quote }}
+  DB_PORT: {{ .Values.configMap.dbPort | quote }}

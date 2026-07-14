@@ -1,0 +1,8 @@
+replicaCount: 3
+
+image:
+  repository: varshithkumar8/employee-management
+  tag: latest
+
+postgres:
+  storageSize: 10Gi

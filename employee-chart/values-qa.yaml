@@ -1,0 +1,8 @@
+replicaCount: 2
+
+image:
+  repository: varshithkumar8/employee-management
+  tag: qa
+
+postgres:
+  storageSize: 5Gi

@@ -5,7 +5,7 @@ metadata:
   name: postgres
 
 spec:
-  replicas: 1
+  replicas: {{ .Values.postgres.replicaCount }}
 
   selector:
     matchLabels:
@@ -18,12 +18,13 @@ spec:
 
     spec:
       containers:
-      - name: postgres
+      - name: {{ .Values.postgres.container.name }}
 
-        image: postgres:17
+        image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+        imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
 
         ports:
-        - containerPort: 5432
+        - containerPort: {{ .Values.postgres.service.port }}
 
         envFrom:
         - secretRef:
@@ -31,13 +32,13 @@ spec:
 
         env:
         - name: PGDATA
-          value: /var/lib/postgresql/data/pgdata
+          value: {{ .Values.postgres.pgdata | quote }}
 
         volumeMounts:
         - name: postgres-storage
-          mountPath: /var/lib/postgresql/data
+          mountPath: {{ .Values.postgres.storage.mountPath }}
 
       volumes:
       - name: postgres-storage
         persistentVolumeClaim:
-          claimName: postgres-pvc
+          claimName: {{ .Values.postgres.pvc.claimName }}
