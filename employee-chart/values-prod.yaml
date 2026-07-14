@@ -1,4 +1,4 @@
-replicaCount: 4
+replicaCount: 5
 
 image:
   repository: varshithkumar8/employee-management
